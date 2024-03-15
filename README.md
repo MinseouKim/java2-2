@@ -4,7 +4,7 @@
 
 
 ## 3월 15일
-
+Repository name : java-2-2-name
 snackcase : _를 사용한 파일명 (ex: python_name)  
 
 commit 할때 한글 명령어로 입력하기  
