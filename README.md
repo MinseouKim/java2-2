@@ -1,7 +1,8 @@
 # 김민서 202130103
 
-## 3월 25일 
-
+## 3월 22일 
+ctrl + shift + p = >를 나오게 하는 명령어  
+java 프로젝트 파일 만드는 방법 >java create java project -> no build tools -> working dir에 파일 생성
 
 ## 3월 15일
 Repository name : java-2-2-name
