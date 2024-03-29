@@ -118,4 +118,15 @@ git 명령어 자세히 더 알아보고 싶으면 https://git-scm.com/book/en/v
 [리스트](#리스트-list)  
 ![유럽](./유럽사진.jpg)
 ![절대경로](https://search.pstatic.net/common/?src=http%3A%2F%2Fcafefiles.naver.`net%2FMjAxODA5MjFfMTE3%2FMDAxNTM3NTI3MjU2MzAw.sLjqzjaU21hKiC47SGqlq1TF0wKTdWhX0fjq3VTfB74g.84eZJhNrawRExrrwOV-4-9oZtNpdRPZ46iFYYmgQVWog.JPEG.soakdma84%2FexternalFile.jpg&type=sc960_832)
-`
+
+
+Repository name : 하이픈을 사용한 파일명(ex:java-2-2-name)  
+snackcase : _를 사용한 파일명 (ex: python_name)  
+
+commit 할때 한글 명령어로 입력하기  
+(파일 이름보고 쉽게 알아볼수 있는게 중요, 영어 명령어로 치는게 좋음)
+최신본이 맨위 쪽에 올수 있게 작성하기  
+git 명령어 자세히 더 알아보고 싶으면 https://git-scm.com/book/en/v2
+접속  
+오늘 할 작업이 모두 끝났으면 push 해주기
+
