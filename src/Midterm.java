@@ -32,3 +32,4 @@ public class Midterm {
 		scanner.close();
 	}
 }
+
