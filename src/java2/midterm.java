@@ -1,3 +1,5 @@
+package java2;
+
 /*
  * 이 프로그램은 StringBuffer 클래스를 이용하여 사용자로부터 영문(스페이스 포함)을 입력받고,
  * 글자 하나만 랜덤하게 선택해서 다른 글자로 수정하는 프로그램입니다.
@@ -13,7 +15,7 @@ public class Midterm {
 			System.out.print(">>");			
 			String s = scanner.nextLine(); 
 			StringBuffer sb = new StringBuffer(); // (문제3) StringBuffer 객체 sb 생성할 수 있게 코드를 완성해 주세요.
-			if(sb.toString("exit").equal(sb.toString()) ) { // (문제4) exit가 입력됬는지 확인하는 조건절을 완성해 주세요.
+			if(sb.toString().equals(sb.toString()) ) { // (문제4) exit가 입력됬는지 확인하는 조건절을 완성해 주세요.
 				System.out.println("프로그램을 종료합니다.");	
 				break;
 			

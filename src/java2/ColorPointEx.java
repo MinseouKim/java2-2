@@ -1,3 +1,5 @@
+package java2;
+
 class Point {
     private int x, y; 
     public void set(int x, int y){
