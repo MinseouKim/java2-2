@@ -1,4 +1,69 @@
-#### 2024-05-03 9주차
+## 2024-05-17 11주차
+### 컨테이너와 배치, 배치관리자 개념
+- Flowlayout 배치 관리자  
+컴포넌트가 삽입되는 순서대로 왼쪽에서 오른쪽으로 배치  
+배치할 공강이 없으면 아래로 내려와서 반복한다.
+- BorderLayout 배치 관리자  
+컨테이너의 공간을 동,서, 남, 북, 중앙의 5개 영역에 컴포넌트 배치
+- Gridlayout 배치 관리자
+컨테이너를 프로그램에서 설정한 동일한 크기의 2차원 격자로 나눔  
+컴포넌트는 삽입 순서대로 좌에서, 우로 다시 위에서 배치 된다.
+- cardLayout 관리자
+
+## 컨테이너와 디폴트 배치 관리자
+컨테이너 생성시 자동으로 생성되는 배치 관리자
+
+## 컨테이너에 새로운 배치 관리자 설정, setLayout()메소드
+setLayout(LayoutManager lm)메소드 호출  
+Im을 새로운 배치 관리자로 설정
+
+사례
+
+## FlowLayout 배치 관리자
+- 배치 방법 
+
+## Flowlayout의 생성자
+FlowLayout()  
+FlowLayout(int align, int Gap, int VGap)
+설명
+
+### 예제 코드
+의문이 들면 주석처리 해보기 주석처리 : //  
+주석까지 같이 써보면서 이해하기
+
+## BorderLayout 배치 관리자
+배치 방법
+- 컨테이너 공강을 5구역으로 분할, 배치 (동,서, 남, 북)
+
+## GridLayout 배치 관리자
+
+## GridLayout 생성자
+생성자
+- Gridlayout()
+- GridLayout(int rows, int cols)
+- GridLayout(int rows, int cols, int hGap, int vGap
+
+
+## 배치 관리자없는 컨테이너
+#### 배치 관리자가 없는 컨테이너가 필요한 경우
+- 응용 프로그램에서 직접 컴포넌트의 크기의 위치를 결정하고자 하는 경우
+    1. 
+
+## 컴포넌트의 절대 위치와 크기 설정
+#### 배치 관리자가 없는 컨테이너에 컴포넌트를 삽입할 떄
+- 프로그램에서 컴포넌트의 절대 크기와 위치 설정
+- 컴포넌트들이 서로 겹치게 할 수 있음.
+
+#### 컴포넌트의 크기와 위치 설정 메소드
+- void setSize(int width, int height) = width x height 크기로 설정
+- void setLocation(int x, int y)  = 컴포넌트의 왼쪽 상단 모서리 좌표를 (x,y)로 설정
+- void setBounds(int x, int y, int width, int height) = 크기와 위치 동시설정
+
+
+
+
+
+## 2024-05-03 9주차
 # 컬랙션과 제네릭  
 
 ## 컬렉션의 특징
