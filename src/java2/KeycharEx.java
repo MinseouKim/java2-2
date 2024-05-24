@@ -25,17 +25,18 @@ public class KeycharEx extends JFrame{
             int r = (int) (Math.random()*256);
             int g = (int) (Math.random()*256);
             int b = (int) (Math.random()*256);
-            switch (e.getKeyChar()) {
-                case '\n': // <enter> 키 입력
+            switch (e.getKeyChar()) { // 입력된 키 문자
+                case '\n': // <Enter> 키 입력
                     la.setText("r=" +r+ ", g="+ g + ", b="+b);
                     getContentPane().setBackground(new Color(r, g, b));
+
                     break;
                     case 'q' : System.exit(0); 
             }
         }
     }
     public static void main(String[] args) {
-        new KeyCharEx();
+        new KeycharEx();
     }
     
 }

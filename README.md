@@ -302,18 +302,62 @@ public class MouseListenerEx extends JFrame{
 - ***p372*** 참고
 
 ### 예제 9-6 KeyListener 활용 - 입력된 문자 키 판별
-```java 
+```java package java2;
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class KeycharEx extends JFrame{
+    private JLabel la = new JLabel("<Enter>키로 배경색이 바뀝니다");
+    public KeycharEx(){
+        super("KeyListener의 문자 키 입력 예제");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Container c = getContentPane(); //컨텐트팬 알아내기
+        c.setLayout(new FlowLayout());
+        c.add(la);
+        c.addKeyListener(new MyKeyListener()); // 키 리스너 달기
+        setSize(250,150);
+        setVisible(true);
+
+        c.setFocusable(true); // 켄텐트팬이 포커스를 받을 수 있도록 설정
+        c.requestFocus(); // 컨텐트팬에 포커스 설정. 키 입력 가능해짐
+    }
+    class MyKeyListener extends KeyAdapter{ // 키 리스너
+        public void keyPressed(KeyEvent e){
+            // 임의의 색을 만들기 위해 랜덤하게 r, g, b 성분 생성
+            int r = (int) (Math.random()*256);
+            int g = (int) (Math.random()*256);
+            int b = (int) (Math.random()*256);
+            switch (e.getKeyChar()) { // 입력된 키 문자
+                case '\n': // <Enter> 키 입력
+                    la.setText("r=" +r+ ", g="+ g + ", b="+b);
+                    getContentPane().setBackground(new Color(r, g, b));
+
+                    break;
+                    case 'q' : System.exit(0); 
+            }
+        }
+    }
+    public static void main(String[] args) {
+        new KeycharEx();
+    }
+    
+}
 ```
 
 ### Mouse 이벤트와 MouseListener, MouseMotionListener
-- p 377
 ### 마우스 리스너 달기와 MouseEvent 객체 활용
 #### 마우스 리스너 달기
+##### pg 376 의 표 9-6의 처음 5가지 경우 발생하는 Mouse 이벤트를 처리하고자 한다면, Mouse 리스너를 작성하여 컴포넌트에 다음과 같이 등록한다.
+    compoenet,addMouseListener(MouseListener);
+ ##### 컴포넌트가 마우스 무브나 마우스 드레깅을 함께 처리하고자 하면, Mouse 리스너 따로 등록
+
+        component.addMouseMotionListener(myMouseMotionListener);
 
 ### 9-7 예제 해보기
 ## 해야할 일 : 교수님 강의시간에 한 챕터씩 나가고 미리 코드 쳐보고 정리해보기
-- 마우스 리스너는 컴포넌트에 다음과 같이 등록
-- 컴포넌트가 마우스 무브나 마우스 드레깅을 함께 처리하고자 하면, Mouse 리스너 따로 등록
+
 ## 2024-05-17 11주차
 #### 컨테이너와 배치, 배치관리자 개념
 - Flowlayout 배치 관리자  
