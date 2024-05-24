@@ -1,5 +1,321 @@
+# 202130103 김민서
+## 2024-05-24 12주차
+수업 진행 -> 9장 -> 12,13장 -> 10장 스윙 컴포넌트(버튼 라벨 제외 전에 배웠기 때문에)  
+
+### 이벤트 기반 프로그래밍 
+#### 이벤트 기반 프로그래밍  
+이벤트의 발생에 의해 프로그램 흐름이 결정되는 방식
+- 이벤트가 발생하면 이벤트를 처리하는 루틴 실행
+- 실행할 코드는 이벤트의 발생에 의해 견적으로 결정
+#### 반대되는 개념 : 베치 실행
+프로그램의 개발자가 프로그램의 흐름을 결정하는 방식
+#### 이벤트 종류
+- 사용자의 입력 : 마우스 드레그, 마우스 클릭, 키보드 누름
+- 센서부터의 입력, 네트워크로부터 데이터 송수신
+- 다른 응용프로그램이나 다른 스레드로부터의 메세지
+#### 이벤트 기반 응용 프로그램의 구조
+- 각이벤트마다 처리하는 리스너 코드 보유
+#### GUI 응용프로그램은 이벤트 기반 프로그래밍으로 작성됨
+- GUI 라이브러리 종류(C++의 NFC, C#GUI, Visual Basic, X Window, Android등, 자바의 AWT와 Swing)
+### 자바 스윙 프로그램에서 이벤트 처리 과정
+### 이벤트가 처리되는 과정
+#### 이벤트 발생
+- 예: 마우스의 움직임 혹은 키보드 입력
+#### 이벤트  객체 생성
+- 현재 발생한 이벤트에 대한 정보를 가진 객체
+#### 응용프로그램에 작성된 이벤트 리스너 찾기
+#### 이벤트 리스너 실행
+- 리스너에 이벤트 객체 전달
+- 리스너 코드 실행
+
+### 이벤트 객체
+#### 이벤트 객체
+- 발생한 이벤트에 고나한 정보를 가진 객체
+- 이벤트 리스너에 전달됨(이벤트 리스너 코드가 발생한 이벤트에 대한 상황을 파악할 수 있게 함)
+
+### 이벤트 객체가 포함하는 정보
+- 이벤트 종류와 이벤트 소스
+- 이벤트가 발생한 화면 좌표 및 컴포넌트 내 좌표
+- 이벤트가 발생한 버튼이나 메뉴 아이템의 문자열
+- 클릭된 마우스 버튼 번호 및 마우스의 클릭 횟수
+- 키의 코드 값과 문자 값
+- 체크박스, 라디오 버튼 등과 같은 컴포넌트에 이벤트가 발생하였다면 체크 상태
+
+### 이벤트 소스를 알아내는 메소드
+### Object getSour0ce()
+- 발생한 이벤트의 소스 컴포넌트 리턴
+- object 타입으로 리턴하므로 캐스팅하여 사용
+- 모든 이벤트 객체에 대해 적용
+
+### 이벤트 객체, 이벤트 소스, 발생하는 경우
+- p358 한번씩 읽어보기
+
+### 리스터 인터페이스
+#### 이벤트 리스너
+- 이벤트를 처리하는 자바 로그램 코드, 클래스로 작성
+#### 자바는 다양한 리스터 인터페이스 제공
+- 예) ActionListerner 인터페이스 - 버튼 클릭 이벤트를 처리하기 위한 인터페이스
+- 예) MouseListener 인터페이스 - 마우스 조작에 따른 이벤트를 처리하기 위한 인터페이스
+#### 사용자의 이벤트 리스터 작성
+- 자바의 리스너 인터페이스를 상속받아 구현
+
+
+### 이벤트 리스너 작성 과정 사례
+1. 이벤트와 이벤트 리스너 선택
+- 버튼 클릭을 처리하고자 하는 경우
+- 이벤트 : Action 이벤트, 이번트 리스너 :ActionListener
+2. 이벤트 리스너 클래스 작성 : ActionListener 인터페이스 구성 ***p361***
+3. 이벤트 리스너 등록 
+- 이벤트를 받아 처리하고자 하는 컴포넌트에 이벤트 리스너 등록
+- componentaddXXXListener(listener)
+- xxx : 이벤트 명, listener : 이벤트 리스너 객체 
+***p361***
+
+### 이벤트 리스너 작성 방법
+### 3가지 방법
+#### 독립 클래스로 작성
+- 이벤트 리스너를 완전한 클래스로 작성
+- 이벤트 리스너를 여러 곳에서 사용할 때 적합
+## 예제
+```java package java2;
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class IndepClassListener extends JFrame{
+    public IndepClassListener() {
+        setTitle("Action 이벤트 리스너 예제");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        Container c = getContentPane();
+        c.setLayout(new FlowLayout());
+        JButton btn = new JButton("Action");
+        btn.addActionListener(new MyActionListener());
+        c.add(btn);
+
+        setSize(250,120);
+        setVisible(true);
+    }
+    public static void main(String[] args) {
+        new IndepClassListener();
+    }
+
+    
+}
+
+
+class MyActionListener implements ActionListener{
+    public void actionPerformed(ActionEvent e){
+        JButton b = (JButton)e.getSource();
+        if(b.getText().equals("Action"))
+        b.setText("액션");
+        else
+        b.setText("Action");
+}
+}
+```
+#### 내부 클래스(inner class)로 작성
+- 클래스 안에 멤버처럼 클래스 작성
+- 이벤트 리스너를 특정 클래스에서만 사용할 때 적합
+## 예제
+```java package java2;
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class InnerClassListener extends JFrame{
+    public InnerClassListener() {
+        setTitle("Action 이벤트 리스너 예제");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        Container c = getContentPane();
+        c.setLayout(new FlowLayout());
+        JButton btn = new JButton("Action");
+        btn.addActionListener(new MyActionListener());
+        c.add(btn);
+
+        setSize(250,120);
+        setVisible(true);
+    }
+
+    private class MyActionListener implements ActionListener{
+        public void actionPerformed(ActionEvent e){
+        JButton b = (JButton)e.getSource();
+        if(b.getText().equals("Action"))
+        b.setText("액션");
+        else
+            b.setText("Action");
+
+            InnerClassListener.this.setTitle(b.getText());
+        }
+    }
+    public static void main(String[] args) {
+        new InnerClassListener();
+    }
+
+}
+```
+#### 익명 클래스(anonymous class)로 작성
+- 클래스의 이름 없이 간단히 리스너 작성
+- 클래스 조차 만들 필요 없이 리스너 코드가 간단한 경우에 적합
+
+
+### 익명 클래스로 이벤트 리스너 작성
+#### 익명 클래스(annoymous class):아름 없는 클래스
+- (클레스 선언 + 인스턴스 생성)을 한번에 달성
+- 간단한 리스너의 경우 익명 클레스 사용 추천
+#### ActionListener를 구현하는 익명의 이벤트 리스너 작성 예
+- P364
+## 예제
+```java package java2;
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class AnonymousClassListener extends JFrame{
+    public AnonymousClassListener() {
+        setTitle("Action 이벤트 리스너 작성");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        Container c = getContentPane();
+        c.setLayout(new FlowLayout());
+        JButton btn = new JButton("Action");
+        c.add(btn);
+        btn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                JButton b = (JButton)e.getSource();
+                if(b.getText().equals("Action"))
+                b.setText("액션");
+                else
+                b.setText("Action");
+
+                setTitle(b.getText());
+            }
+        });
+
+        setSize(200,120);
+        setVisible(true);
+    }
+    public static void main(String[] args) {
+        new AnonymousClassListener();
+    }
+
+    
+}
+```
+### 예제 9-4 마우스 이벤트 리스너 작성 연습 - 마우스로 문자열 이동 시키기
+```java package java2;
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class MouseListenerEx extends JFrame{
+    private JLabel la = new JLabel("Hello"); // "Hello" 문자열을 추가하기 위한 레이블
+
+    public MouseListenerEx(){
+        setTitle("Bouse 이벤트 예제");;
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Container c = getContentPane();
+        c.addMouseListener(new MyMouseListener());
+
+        c.setLayout(null); // 컨텐트팬의 배치관리자 삭제
+        la.setSize(50,20); // 레이블의 크기 50x20 설정
+        la.setLocation(30,30); // 레이블의 위치(30,30)으로 설정
+        c.add(la); // 레이블 삽입
+
+        setSize(200, 200);
+        setVisible(true);
+    }
+
+    class MyMouseListener implements MouseListener{
+        public void mousePressed(MouseEvent e){
+            int x = e.getX(); // 마우스 클릭 좌표 x
+            int y = e.getY(); // 마우스 클릭 좌표 Y
+            la.setLocation(x,y); // 레이블의 위치를 (x,y)로 이동
+        }
+        public void mouseReleased(MouseEvent e){}
+        public void mouseClicked(MouseEvent e){}
+        public void mouseEntered(MouseEvent e){}
+        public void mouseExited(MouseEvent e){}
+    }
+    public static void main(String[] args) {
+        new MouseListenerEx();
+    }
+}
+
+```
+### 어댑터 클래스
+#### 이벤트 리스너 구현에 따른 부담
+- 리스너의 추상 메소드를 모두 구현해야 하는 부담
+- 예) 마우스 리스너에서 마우스가 눌러지는 경우(mousePressed())만 처리하고자 하는 경우도 나머지 4개의 메소드를 모두 구현해야 하는 부담
+
+### Key 이벤트와 포커스
+#### 키 입력 시, 다음 세 경우 각각 Key 이벤트 발생
+- 키를 누르는 순간
+- 누른 키를 떼는 순간
+- 누른 키를 떼는 순간(Unicode키의 경우에만)
+
+#### 키 이벤트를 받을 수 있는 조건 
+- 모든 컨포넌트
+- 현재 포커스(focus)를 가진 컴포넌트가 키 이벤트 독점
+
+#### 포커스(focus) - 강제로 지정할 때 사용하는 것
+- 컴포넌트나 응용프로그램이 키 이벤트를 독점하는 권한
+- 컴포넌트에 포커스 설정 방법 : 다음 2라인 코드 필요
+- compoent.setFocusable(true);  // compenent가 포커스를 받을 수 있도록 설정한다.
+- compoent.requestFocus(); // component에게 포커스를 주어 키 입력을 방을 수 있게 함
+
+### 유니코드(Unicode) 키
+#### 유니코드 키의 특징
+- 국제 산업 표준
+- 전 세계의 문자를 컴퓨터에서 일관되게 표현하기 위한 코드 체계
+- 문자들에 대해서만 키 코드 값 정의 (A-Z,a-z,0-9,@,&등)
+- 문자가 아닌 키 경우에는 표준호된 키코드 값 없음
+
+#### 유니코드 키가 입력되는 경우
+- KeyPressed(),KetTyped(), KeyReleased()가 순서대로 호출
+
+#### 유니코드 키가 아닌 경우
+
+### 가상 키와 입력된 키 판별
+#### KetEvent 객체
+- 입력된 키 정보를 가진 이벤트 객체
+- KeyEvent 객체의 메소드로 입력된 키 판별
+#### KeyEvent 객체의 메소드로 입력된 키 판별
+#### char KeyEventgetKeyChar()
+- 키의 유니코드 문자 값 리턴
+- Unicode 문자 키인 경우에만 의미 있음
+- 입력된 키를 판별하기 위해 문자 값과 비교하면 됨
+#### int KeyEventgetKeyCode()
+- 유니코드 키 포함
+- 모든 키에 대한 정수형 키 코드 리턴
+- 입력된 키를 판별하기 위해 가상키 값과 비교하여야 함
+- 가상 키 값은 ㅏeyEvent 키의 상수로 선언
+
+### 가상 키(Virtual Key)
+#### 가상 키는 keyEvent 클래스에 상수로 선언
+#### 가상 키의 일부 소개
+- ***p372*** 참고
+
+### 예제 9-6 KeyListener 활용 - 입력된 문자 키 판별
+```java 
+```
+
+### Mouse 이벤트와 MouseListener, MouseMotionListener
+- p 377
+### 마우스 리스너 달기와 MouseEvent 객체 활용
+#### 마우스 리스너 달기
+
+### 9-7 예제 해보기
+## 해야할 일 : 교수님 강의시간에 한 챕터씩 나가고 미리 코드 쳐보고 정리해보기
+- 마우스 리스너는 컴포넌트에 다음과 같이 등록
+- 컴포넌트가 마우스 무브나 마우스 드레깅을 함께 처리하고자 하면, Mouse 리스너 따로 등록
 ## 2024-05-17 11주차
-### 컨테이너와 배치, 배치관리자 개념
+#### 컨테이너와 배치, 배치관리자 개념
 - Flowlayout 배치 관리자  
 컴포넌트가 삽입되는 순서대로 왼쪽에서 오른쪽으로 배치  
 배치할 공강이 없으면 아래로 내려와서 반복한다.
