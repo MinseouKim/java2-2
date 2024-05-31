@@ -1,4 +1,718 @@
 # 202130103 김민서
+## 2024-05-31 13주차
+# 10 : 스윙 컴포넌트 활용
+### 자바의 GUI 프로그래밍 방법(2종류)
+#### 자바의 GUI 프로그래밍
+- 스윙 컴포넌트를 이용하여 쉽게 GUI 구축
+자바에서 제공하는 컴포넌트의 한계를 벗어나지 못함
+#### 그래픽 기반 GUI 프로그래밍
+- 그래픽을 이용하여 GUI 구축
+#### 컴포넌트 기반 GUI 프로그래밍에 사용되는 스윙 컴포넌트 
+- **p392** 참고
+### 스윙 컴포넌트의 상속 구조
+#### Jcomponent
+- 스윙 컴포넌트는 모두 상속받는 슈퍼 클래스, 추상 클래스
+- 스윙 컴포넌트들이 상속받는 공통 메소드와 상수 구현
+- JComponent의 주요 메소드 사례(**p393** 참고)
+
+### 스윙 컴포넌트 공통 기능, JComponent의 메소드
+```java
+package java2;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+public class JComponentEx extends JFrame {
+    public JComponentEx() {
+        super("JComponent의 공통 메소드 예제");
+        Container c = getContentPane();
+        c.setLayout(new FlowLayout());
+        JButton b1 = new JButton("Magenta/Yellow Button");
+        JButton b2 = new JButton(" Disabled Button ");
+        JButton b3 = new JButton("getX(), getY()");
+        b1.setBackground(Color.YELLOW); 
+        b1.setForeground(Color.MAGENTA);
+        b1.setFont(new Font("Arial", Font.ITALIC, 20)); 
+        b2.setEnabled(false); 
+        b3.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JButton b = (JButton)e.getSource();
+             setTitle(b.getX() + "," + b.getY()); 
+        }
+    });
+    c.add(b1); c.add(b2); c.add(b3);
+    setSize(260,200); setVisible(true);
+}
+    public static void main(String[] args) {
+    new JComponentEx();
+    }
+}
+```
+### JLabel로 문자열과 이미지 출력
+#### JLabel의 용도
+- 문자열이나 이미지를 화면에 출력하기 위한 목적
+#### JLabel 이용 문자열과 이미지 출력 예제
+```java
+package java2;
+
+import javax.swing.*;
+import java.awt.*;
+    public class LabelEx extends JFrame {
+        public LabelEx() {
+            setTitle("레이블 예제");
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            Container c = getContentPane();
+            c.setLayout(new FlowLayout());
+            JLabel textLabel = new JLabel("제임스 고슬링 입니더!");
+            ImageIcon img = new ImageIcon("images/img1.jpg"); 
+            JLabel imageLabel = new JLabel(img);
+            ImageIcon icon = new ImageIcon("images/img2.jpg"); 
+            JLabel label = new JLabel("커피한잔 하실래예, 전화주이소",
+            icon, SwingConstants.CENTER);
+            c.add(textLabel); c.add(imageLabel); c.add(label);
+            setSize(300,500);
+            setVisible(true);
+        }
+        public static void main(String [] args) {
+        new LabelEx();
+        }
+}
+```
+### 이미지 버튼 만들기
+#### 하나의 버튼에 3개의 이미지 등록
+- 마우스 조작에 따라 3개의 이미지 중 적절한 이미지 자동 출력
+#### 3개의 버튼 이미지
+##### - normalicon
+- 버튼의 보통 상태때 출력되는 이미
+- 생성자에 이미지 아이콘 전달 혹은 JButton의 setIcon(normlIcon);
+##### - rollovericon
+- 버튼에 마우스가 올라갈 때 출력되는 이미지
+- 이미지 설정 메소드 : JButton의 setRolloverIcon(rolloverIcon);
+##### pressedicon
+- 버튼을 누른 상태 때 출력되는 이미지
+- 이미지 설정 메소드 : JButton의 setPressedIcon(pressdIcon);
+#### JButton을 이용한 이미지 버튼 만들기 예제
+```java
+package java2;
+
+import javax.swing.*;
+import java.awt.*;
+    public class ButtonImageEx extends JFrame {
+        public ButtonImageEx() {
+            setTitle("이미지 버튼 예제");
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            Container c = getContentPane();
+            c.setLayout(new FlowLayout());
+            ImageIcon normalIcon = new ImageIcon("images/img2.jpg");
+            ImageIcon rolloverIcon = new ImageIcon("images/img2.jpg");
+            ImageIcon pressedIcon = new ImageIcon("images/img2.jpg");
+            JButton btn = new JButton("call~~", normalIcon);
+            btn.setPressedIcon(pressedIcon); // pressedIcon용 이미지 등록
+            btn.setRolloverIcon(rolloverIcon); // rolloverIcon용 이미지 등록
+            c.add(btn);
+            setSize(250,150);
+            setVisible(true);
+        }
+        public static void main(String [] args) {
+        new ButtonImageEx();
+        }
+}
+```
+### JCheckBox로 체크박스 만들기
+#### JCheckBox의 용도
+- 선택(selected)과 비선택(deselected) 두 상태만 가지는 버튼
+#### 체크 박스 생성
+- JChekBox() : 빈 체크박스
+- JCheckBox(Icon image) : 이미지 체크박스
+- JCheckBox(Icon image, boolean selected) : 이미지 체크 박스
+- JCheckBox(String text, Icon image) : 문자열과 이미지를 가진 체크박스
+- JCheckBox(String text, Icon, booLean selected) : 문자열과 이미지 체크박스
+
+#### 문자열을 가진 체크박스 생성 예
+- JCheckBox apple = new JCheckBox("사과"); //"사과" 체크박스 생성
+- JCheckBox pear = new JCheckBox("배",true); // 선택 상태의 "배" 체크박스 생성
+
+### 예제 10-4 :JCheckBox로 체크박스 만들기
+```java
+package java2;
+import javax.swing.*;
+import java.awt.*;
+    public class CheckBoxEx extends JFrame {
+        public CheckBoxEx() {
+        setTitle("체크박스 만들기 예제");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Container c = getContentPane();
+        c.setLayout(new FlowLayout());
+        // 3개의 체크박스를 생성한다.
+        JCheckBox apple = new JCheckBox("사과");
+        JCheckBox pear = new JCheckBox("배", true);
+        JCheckBox cherry = new JCheckBox("체리");
+        c.add(apple);
+        c.add(pear);
+        c.add(cherry);
+        setSize(250,150);
+        setVisible(true);
+    }
+    public static void main(String [] args) {
+    new CheckBoxEx();
+    }
+}
+
+```
+### 체크박스에 item 이벤트 처리
+#### Item 이벤트
+##### 체크박스의 선택 상태에 변화가 생길 때
+- 사용자가 마우스나 키보드로 체크박스를 선택/해체할 때
+- 프로그램에서 체크박스를 선택/해제하여 체크 상태에 변화가 생길 때
+    JCheckBox("사과");
+    c.setsSelected(true); // 선택 상태로 변경
+##### 이벤트가 발생하면 itemEvent 객체 생성
+##### itemListener 리스너를 이용하여 이벤트 처리
+
+#### ItemListener 리스너의 추상 메소드
+- void itemStateChanged(ItemEvent e)체크박스의 선택 상태가 변하는 경우 호출
+#### ItemEvent의 주요 메소드
+- int getStateChange() //체크박스가 선택되니 경우 ItemEvent.SELECTED를, 해체된 경우 ItemEvent.DESELECTED를 리턴한다.
+- Object getItem() // 이벤트를 발생시킨 아이템 객체를 리턴한다. 체크박스의 경우 JCheckBox 컴포넌트의 레퍼런스를 리턴한다.
+### 10-5 예제
+**포인트( 핸들러 함수가 어떻게 사용되는지)**
+```java
+package java2;
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.*;
+    public class CheckBoxItemEventEx extends JFrame {
+    private JCheckBox [] fruits = new JCheckBox [3]; 
+    private String [] names = {"사과", "배", "체리"}; 
+    private JLabel sumLabel;
+    public CheckBoxItemEventEx() {
+    setTitle("체크박스와 ItemEvent 예제");
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    Container c = getContentPane();
+    c.setLayout(new FlowLayout());
+    c.add(new JLabel("사과 100원, 배 500원, 체리 20000원"));
+    MyItemListener listener = new MyItemListener();
+    for(int i=0; i<fruits.length; i++) {
+        fruits[i] = new JCheckBox(names[i]); 
+        fruits[i].setBorderPainted(true);
+        c.add(fruits[i]);
+        fruits[i].addItemListener(listener);
+    }
+    sumLabel = new JLabel("현재 0 원 입니다."); 
+    c.add(sumLabel);
+    setSize(250,200);
+    setVisible(true);
+    }
+    // Item 리스너 구현
+    class MyItemListener implements ItemListener {
+        private int sum = 0; // 가격의 합
+        public void itemStateChanged(ItemEvent e) {
+        if(e.getStateChange() == ItemEvent.SELECTED) { 
+            if(e.getItem() == fruits[0])
+                sum += 100;
+            else if(e.getItem() == fruits[1])
+                sum += 500;
+        else
+            sum += 20000;
+        }
+        else {
+        if(e.getItem() == fruits[0])
+            sum -= 100;
+        else if(e.getItem() == fruits[1])
+            sum -= 500;
+        else
+            sum -= 20000;
+        }
+        sumLabel.setText("현재 " + sum + "원 입니다."); 
+        }
+    }
+    public static void main(String [] args) {
+    new CheckBoxItemEventEx();
+    }
+ }
+    
+```
+### JRadioButton으로 라디오 버튼 만들기
+#### JRadioButton의 용도
+##### 버튼 그룹을 형성하고, 그룹에 속한 버튼 중 하나만 선택되는 라디오 버튼
+##### 체크박스와의 차이점
+- 체크박스는 각각 선택/해제가 가능하지만, 라디오버튼은 그룹에 속한 버튼 중 하나만 선택
+### 라디오버튼 생성 및 item 이벤트 처리
+#### 버튼 그룹과 라디오 버튼 생성 과정
+```
+1. 버튼 그룹 객체 생성
+ButtonGroup group = new ButtonGroup();
+
+2.라디오 버튼 생성
+JRadioButton apple= new JRadioButton("사과");
+JRadioButton pear= new JRadioButton("배");
+JRadioButton cherry= new JRadioButton("체리");
+
+3.라디오버튼을 버튼 그룹에 삽입
+group.add(apple);
+group.add(pear);
+group.add(cherry);
+
+4.라디오 버튼을 컨테이너에 삽입
+container.add(apple);
+container.add(pear);
+container.add(cherry)
+```
+### 예제 10-6 : JRadioButton으로 라디오 버튼 만들기
+```java
+import javax.swing.*;
+import java.awt.*;
+
+public class RadioButtonEx extends JFrame {
+    public RadioButtonEx() {
+        setTitle("라디오버튼 만들기 예제");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Container c = getContentPane();
+        c.setLayout(new FlowLayout());
+        ButtonGroup g = new ButtonGroup(); // 버튼 그룹 객체 생성
+        JRadioButton apple = new JRadioButton("사과");
+        JRadioButton pear = new JRadioButton("배", true);
+        JRadioButton cherry = new JRadioButton("체리");
+    // 버튼 그룹에 3개의 라디오버튼 삽입
+    g.add(apple);
+    g.add(pear);
+    g.add(cherry);
+    // 컨텐트팬에 3개의 라디오버튼 삽입
+    c.add(apple); c.add(pear); c.add(cherry);
+    setSize(250,150);
+    setVisible(true);
+    }
+    public static void main(String [] args) {
+    new RadioButtonEx();
+    }
+}
+
+```
+### JTextField로 한 줄 입력 창 만들기
+#### JTextFiedld
+#### 한 줄의 문자열을 입력 받는 창(텍스트 필드)
+- 텍스트 입력 도중<Enter>키가 입력되면 Action 이벤트 발생
+- 입력 가능한 문자 개수와 입력 창의 크기는 서로 다름
+#### 텍스트 필드 생성
+- JTextField() // 빈 텍스트필드
+- JTextField(int cols) // 입력 창의 열의 개수가 cols개인 텍스트필드
+- JTextField(String text)// text 문자열로 초기화된 텍스트필드
+- JTextField(String text, int cols) // 입력 창의 열의 개수는 cols개이고 text문자열로 초기화된 텍스트 필드
+#### "컴퓨터공학과"로 초깃값을 가지는 텍스트 필드 생성 예
+- JTextField tf2 = new JTextField("컴퓨터공학과");
+### 예제 10-7 : JTextField로 텍스트필드 만들기
+```java
+package java2;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class TextFieldEx extends JFrame {
+    public TextFieldEx() {
+        setTitle("텍스트필드 만들기 예제");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Container c = getContentPane();
+            
+    c.setLayout(new FlowLayout());
+    c.add(new JLabel("이름 "));
+    c.add(new JTextField(20));
+    c.add(new JLabel("학과 "));
+    c.add(new JTextField("컴퓨터공학과", 20)); 
+    c.add(new JLabel("주소 "));
+    c.add(new JTextField("서울시 ...", 20)); 
+    setSize(300,150);
+    setVisible(true);
+    }
+    public static void main(String [] args) {
+        new TextFieldEx();
+    }
+}
+```
+### JTextArea로 여러 줄의 입력 창 만들기
+#### JTextArea
+##### 여러 줄의 문자열을 입력받을 수 있는 창(텍스트영역)
+- 스크롤바를 지원하지 않는다.
+- JScrollPane 객체에 삽입하여 스크롤바 지원받음
+#### 생성자
+- JTextArea() // 빈텍스트영역
+- JTextArea(int rows, int cols) // 입력창이 rows x cols개의 문자 크기인 텍스트 영역
+- JTextArea(String text) //text 문자열로 초기화된 텍스트영역
+- JTextArea(String text,int **rows**, int cols) //입력 창이 **rows** x cols개의 문자 크기이며 text문자열로 초기화된 텍스트 영역
+### 예제 10-8 :JTextArea로 여러 줄이 입력되는 창 만들기
+```java
+package java2;
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.*;
+
+public class TextAreaEx extends JFrame {
+    private JTextField tf = new JTextField(20);
+    private JTextArea ta = new JTextArea(7, 20); 
+
+    public TextAreaEx() {
+        setTitle("텍스트영역 만들기 예제");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Container c = getContentPane();
+        c.setLayout(new FlowLayout());
+        c.add(new JLabel("입력 후 <Enter> 키를 입력하세요"));
+        c.add(tf);
+        c.add(new JScrollPane(ta));
+
+        tf.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JTextField t = (JTextField)e.getSource();
+                ta.append(t.getText() + "\n"); 
+                t.setText(""); 
+            }
+        });
+        setSize(300,300);
+        setVisible(true);
+    }
+    public static void main(String [] args) {
+    new TextAreaEx();
+    }
+}
+```
+### JList<E>
+#### JList<E>
+##### 하나 이상의 아이템을 보여주고 아이템을 선택하도록 하는 리스트
+##### JAVA 7부터 제네릭 리스트로 바뀜
+- <E>에 지정된 타입의 객체만 저장하는 리스트
+##### JScrollPane에 JList<E>를 삽입하여 스크롤 가능
+#### 리스트 생성
+- JList<E>() // 빈 리스트
+- JList<E>(Vector listData) //벡터로부터 아이템을 공급받는 리스트
+- JList<E>(Object [] listData) // 배열로부터 아이템을 공급받는 리스트
+#### 예) 9개의 과일 이름 문자열이 든 리스트 만들기
+- String []fruits={"apple","banana","kiwi","mango","pear","peach","berry","strawberry", "blackberry"};  
+JList <String> strList = new JList<String>(fruits);
+### 예제 10-9 : JList<E>로 다양한 리스트 만들기
+```java
+package java2;
+
+import javax.swing.*;
+import java.awt.*;
+public class ListEx extends JFrame {
+    private String [] fruits= {"apple", "banana", "kiwi", "mango", 
+        "pear", "peach", "berry", "strawberry", "blackberry"};
+    private ImageIcon [] images = { new ImageIcon("images/icon1.png"),
+                            new ImageIcon("images/icon2.png"),
+                            new ImageIcon("images/icon3.png"),
+                            new ImageIcon("images/icon4.png") };
+
+public ListEx() {
+    setTitle("리스트 만들기 예제");
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    Container c = getContentPane();
+    c.setLayout(new FlowLayout());
+
+    JList<String> strList = new JList<String>(fruits); 
+    c.add(strList);
+
+    JList<ImageIcon> imageList = new JList<ImageIcon>(); 
+    imageList.setListData(images); 
+    c.add(imageList);
+
+    JList<String> scrollList = new JList<String>(fruits); 
+    c.add(new JScrollPane(scrollList)); 
+
+    setSize(300,300); setVisible(true);
+    }
+    public static void main(String [] args) {
+    new ListEx();
+    }
+}
+```
+### JComboBox<E>
+#### JComboBox<E>
+- 텍스트필드와 버튼, 그리고 드롭다운 리스트로 구성되는 콤보박스
+-드롭다운 리스트에서 선택한 것이 텍스트필드에 나타남
+#### 콤보박스 생성
+- JComboBox<E>() // 빈콤보박스
+- JComboBox<E>(Vector listData) // 벡터로부터 아이템을 공급받는 콤보박스
+- JComboBox<E>(Object[]listData) // 배열로부터 아이템을 공급받는 콤보박스
+##### 예) 텍스트를 아이템으로 가진 콤보 박스 생성
+```
+String [] fruits = {"apple", "banana", "kiwi", 
+        "mango", "pear", "peach", 
+        "berry", "strawberry", "blackberry" };
+JComboBox<String> combo = new JComboBox<String>(fruits);
+```
+### JComboBox<E>로 콤보박스 만들고 활용하기
+```java
+package java2;
+
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.*;
+public class ComboActionEx extends JFrame {
+    private String [] fruits = {"apple", "banana", "mango"}; 
+    private ImageIcon [] images = { new ImageIcon("images/apple.jpg"),
+                        new ImageIcon("images/banana.jpg"),
+                        new ImageIcon("images/mango.jpg") };
+    private JLabel imgLabel = new JLabel(images[0]); 
+
+    public ComboActionEx() {
+    setTitle("콤보박스 활용 예제");
+    Container c = getContentPane();
+    c.setLayout(new FlowLayout());
+    JComboBox<String> combo = new JComboBox<String>(fruits); 
+    c.add(combo); c.add(imgLabel);
+
+    // 콤보박스에 Action 리스너 등록. 선택된 아이템의 이미지 출력
+    combo.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            JComboBox<String> cb = (JComboBox<String>)e.getSource(); 
+            int index = cb.getSelectedIndex(); 
+            imgLabel.setIcon(images[index]); 
+            }
+    });
+    setSize(300,250);
+    setVisible(true);
+    }
+    public static void main(String [] args) {
+    new ComboActionEx();
+    }
+}
+```
+
+### 메뉴 구성
+#### 메뉴 만들기에 필요한 스윙 컴포넌트
+##### 메뉴아이템 - JMenuItem
+##### 메뉴 - JMenu
+- 여러 개의 메뉴 아이템을 가짐
+##### 메뉴바 – JMenuBar
+- 여러 개의 메뉴를 붙이는 바이며, 프레임에 부착됨
+##### 분리선
+- 메뉴아이템 사이의 분리선으로 separator라고 부름
+- JMenu의 addSeparator()를 호출하여 삽입함
+
+### 메뉴 만드는 과정
+```
+(1) JMenuBar 컴포넌트 생성 
+JMenuBar mb = new JMenuBar();
+(2) JMenu 컴포넌트를 생성하여 JMenuBar에 붙인다
+JMenu screenMenu = new JMenu("Screen");
+mb.add(screenMenu);
+(3) JMenuItem 컴포넌트를 생성하여 JMenu에 붙인다.  
+(3’) 여러 개의 메뉴와 메뉴 아이템을 생성한다.
+screenMenu.add(new JMenuItem("Load"));
+screenMenu.add(new JMenuItem("Hide"));
+screenMenu.add(new JMenuItem("ReShow"));
+screenMenu.addSeparator();
+screenMenu.add(new JMenuItem("Exit"));
+(4) JMenuBar 컴포넌트를 JFrame에 붙인다.
+frame.setJMenuBar(mb)
+```
+#### 예제 10-11 : 메뉴 만들기
+```java
+package java2;
+
+import javax.swing.*;
+
+public class MenuEx extends JFrame {
+public MenuEx() {
+    setTitle("Menu 만들기 예제");
+    createMenu(); // 메뉴 생성, 프레임에 삽입
+    setSize(250,200);
+    setVisible(true);
+}
+public void createMenu() {
+    JMenuBar mb = new JMenuBar(); 
+
+    JMenu screenMenu = new JMenu("Screen");
+    screenMenu.add(new JMenuItem("Load"));
+    screenMenu.add(new JMenuItem("Hide"));
+    screenMenu.add(new JMenuItem("ReShow"));
+    screenMenu.addSeparator();
+    screenMenu.add(new JMenuItem("Exit"));
+
+    mb.add(screenMenu);
+    mb.add(new JMenu("Edit"));
+    mb.add(new JMenu("Source"));
+    mb.add(new JMenu("Project"));
+    mb.add(new JMenu("Run"));
+    setJMenuBar(mb);
+    }
+    public static void main(String [] args) {
+    new MenuEx();
+    }
+}
+```
+### 메뉴아이템에 Action 이벤트 달기
+#### 메뉴아이템을 클릭하면 Action 발생
+- 메뉴아이템은 사용자로부터의 지시나 명령을 받는데 사용
+- ActionListener 인터페이스로 리스너 작성
+- 각 메뉴아이템마다 이벤트 리스너 설정  
+
+##### 예) Load 메뉴아이템에 Action 리스너를 작성하는 경우
+```
+JMenuItem item = new JMenuItem("Load");
+item.addActionListener(new MenuActionListener()); // 메뉴아이템에 Action 리스너 설정
+screenMenu.add(item);
+class MenuActionListener implements ActionListener {
+    public void actionPerformed(ActionEvent e) {
+    // 사용자가 Load 메뉴아이템을 선택하는 경우 처리할 작업 구현...
+    }
+}
+```
+
+### 예제 10-12 : 메뉴에 Action 리스너 활용
+```java
+package java2;
+
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.*;
+public class MenuActionEventEx extends JFrame {
+    private JLabel imgLabel = new JLabel(); // 빈 레이블
+
+    public MenuActionEventEx() {
+        setTitle("Menu에 Action 리스너 만들기 예제");
+        createMenu();
+        getContentPane().add(imgLabel, BorderLayout.CENTER);
+        setSize(250,200); setVisible(true);
+    }
+    
+    public void createMenu() { 
+        JMenuBar mb = new JMenuBar(); // 메뉴바 생성
+        JMenuItem [] menuItem = new JMenuItem [4];
+        String[] itemTitle = {"Load", "Hide", "ReShow", "Exit"};
+        JMenu screenMenu = new JMenu("Screen");
+        MenuActionListener listener = new MenuActionListener(); 
+
+        for(int i=0; i<menuItem.length; i++) {
+            menuItem[i] = new JMenuItem(itemTitle[i]); 
+            menuItem[i].addActionListener(listener); 
+            screenMenu.add(menuItem[i]);
+        }
+    mb.add(screenMenu); 
+    setJMenuBar(mb); // 메뉴바를 프레임에 부착
+    }
+    class MenuActionListener implements ActionListener { 
+        public void actionPerformed(ActionEvent e) {
+            String cmd = e.getActionCommand(); 
+            switch(cmd) { // 메뉴 아이템의 종류 구분
+                case "Load" :
+                    if(imgLabel.getIcon() != null) return; 
+                                            // 이미 로딩되었으면 리턴
+                    imgLabel.setIcon(new 
+                                ImageIcon("images/img.jpg")); 
+                    break;
+                case "Hide" :
+                    imgLabel.setVisible(false); break;
+                case "ReShow" :
+                    imgLabel.setVisible(true); break;
+                case "Exit" :
+                    System.exit(0); break;
+                }
+            }
+        }
+        public static void main(String [] args) {
+        new MenuActionEventEx();
+        }
+}
+
+```
+
+### 팝업 다이얼로그, JOptionPane
+#### 팝업 다이얼로그
+#####  사용자에게 메시지를 전달하거나 문자열을 간단히 입력받는 용도
+##### JOptionPane 클래스를 이용하여 생성
+- static 타입의 간단한 메소드 이용
+#### 입력 다이얼로그 - JOptionPane.showInputDialog()
+##### 한 줄을 입력 받는 다이얼로그
+```
+String name = JOptionPane.showInputDialog("이름을 입력하세요.");
+// name에 "Java Kim"이 리턴
+// 취소 버튼이나, 입력 없이 다이얼로그가 닫히면 null 리턴
+```
+### 확인 다이얼로그
+#### 확인 다이얼로그 - JOptionPane.showConfirmDialog()
+##### 사용자로부터 Yes/No 응답을 입력 받는 다이얼로그
+- JOptionPane.showConfirmDialog(Component parentComponent, Object msg, String title, int optionType)
+- parentComponent : 다이얼로그의 부모 컴포넌트로서 다이얼로그가 출력되는 영역의 범위 지정을 위해 사용(예: 프레임). null이면 전체 화면 중앙에 출력
+- msg : 다이얼로그 메시지
+- title : 다이얼로그 타이틀
+- optionType : 다이얼로그 옵션 종류 지정
+    YES_NO_OPTION, YES_NO_CANCEL_OPTION, OK_CANCEL_OPTION
+- 리턴 값 : 사용자가 선택하나 옵션 종류
+    YES_OPTION, NO_OPTION, CANCEL_OPTION, OK_OPTION, CLOSED_OPTION
+
+### 메시지 다이얼로그
+####  메시지 다이얼로그 – showMessageDialog
+##### 단순 메시지를 출력하는 다이얼로그
+- static void JOptionPane.showMessageDialog(Component parentComponent, Object msg, String title, int messageType)
+- parentComponent : 다이얼로그의 부모컴포넌트로써 다이얼로그가 출력되는 영역의 범위 지정을 위해 사용. null 이면 전체 화면 중앙 출력
+- msg : 다이얼로그 메시지
+- title : 다이얼로그 타이틀
+- messageType : 다이얼로그의 종류로서 다음 중 하나
+    ERROR_MESSAGE, INFORMATION_MESSAGE, WARNING_MESSAGE, QUESTION_MESSAGE, PLAIN_MESSAGE
+
+### 예제 10-13 : JOptionPane으로 3가지 팝업 다이얼로그 만들기
+```java
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.*;
+
+public class OptionPaneEx extends JFrame {
+    public OptionPaneEx() {
+        setTitle("옵션 팬 예제");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Container c = getContentPane();
+        setSize(500,200);
+        c.add(new MyPanel(), BorderLayout.NORTH);
+        setVisible(true);
+        }
+    class MyPanel extends Panel {
+        private JButton inputBtn = new JButton("Input Name");
+        private JTextField tf = new JTextField(10);
+        private JButton confirmBtn = new JButton("Confirm");
+        private JButton messageBtn = new JButton("Message");
+
+        public MyPanel() {
+            setBackground(Color.LIGHT_GRAY);
+            add(inputBtn);
+            add(confirmBtn);
+            add(messageBtn);
+            add(tf);
+        
+            inputBtn.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    String name = 
+                        JOptionPane.showInputDialog("이름을 입력하세요.");
+                if(name != null)
+                        tf.setText(name);
+            }
+            });
+            confirmBtn.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    int result = JOptionPane.showConfirmDialog(null, 
+                        "계속할 것입니까?", "Confirm", 
+                                JOptionPane.YES_NO_OPTION);
+                    if(result == JOptionPane.CLOSED_OPTION)
+                        tf.setText("Just Closed without Selection");
+                    else if(result == JOptionPane.YES_OPTION)
+                        tf.setText("Yes");
+                    else
+                        tf.setText("No");
+                        }
+                    });
+                    messageBtn.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            JOptionPane.showMessageDialog(null, 
+                                "조심하세요", "Message", 
+                                        JOptionPane.ERROR_MESSAGE); 
+                        }
+                    });
+                }
+            }
+            public static void main(String [] args) {
+            new OptionPaneEx();
+            }
+
+}
+
+```
 ## 2024-05-24 12주차
 수업 진행 -> 9장 -> 12,13장 -> 10장 스윙 컴포넌트(버튼 라벨 제외 전에 배웠기 때문에)  
 
