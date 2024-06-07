@@ -1,4 +1,445 @@
 # 202130103 김민서
+## 2024-06-07 14주차
+### 스윙 컴포넌트 그리기, paintComponent()
+### paintComponent()의 오버라이딩과 JPanel
+### 예제 11-1 : JPanel을 상속받은 패널에 도형 그리기
+```java
+package java2;
+
+import javax.swing.*;
+import java.awt.*;
+public class paintJPanelEx extends JFrame {
+    public paintJPanelEx() {
+        setTitle("JPanel의 paintComponent() 예제");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setContentPane(new MyPanel());
+        setSize(250,200);
+        setVisible(true);
+    }
+    // JPanel을 상속받는 새 패널 구현
+    class MyPanel extends JPanel {
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.setColor(Color.BLUE); // 파란색 선택
+            g.drawRect(10,10,50,50);
+            g.drawRect(50,50,50,50);
+
+            g.setColor(Color.MAGENTA); // 마젠타색 선택
+            g.drawRect(90,90,50,50);
+        }
+    }
+    public static void main(String [] args) {
+        new paintJPanelEx();
+    }
+}
+
+```
+
+### 그래픽 기반 GUI 프로그래밍
+#### 그래픽 기반 GUI 프로그래밍
+##### 스윙 컴포넌트에 의존하지 않고 선, 원 이미지 등을 이용하여 직접 화면을 구성하는 방법
+##### 그래픽 기반 GUI 프로그래밍의 학습이 필요한 이유
+- 
+### Graphic와 문자열 출력
+#### Graphic의 기능
+- 색상 선택, 문자열 ,도형 그리기, 도형 칠하기, 이미지 그리기, 클리핑
+### 그래픽의 색과 폰트
+#### 
+### 예제 11-2 : Color와 Font를 이용하여 문자열 그리기
+```java
+import javax.swing.*;
+import java.awt.*;
+public class GraphicsColorFontEx extends JFrame {
+    public GraphicsColorFontEx() {
+        setTitle("문자열, Color, Font 사용 예제");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setContentPane(new MyPanel());
+        setSize(300, 300);
+        setVisible(true);
+}
+    class MyPanel extends JPanel {
+        public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.setColor(Color.BLUE); // 파란색 지정
+        g.drawString("자바가 정말 재밋다.~~", 30,30);
+        g.setColor(new Color(255, 0, 0)); // 빨간색 지정
+        g.setFont(new Font("Arial", Font.ITALIC, 30));
+        g.drawString("How much?", 30, 70);
+        g.setColor(new Color(0x00ff00ff));
+        for(int i=1; i<=4; i++) {
+            g.setFont(new Font("Jokerman", Font.ITALIC, i*10));
+            g.drawString("This much!!", 30, 60+i*40);
+        }
+    }
+}
+    public static void main(String [] args) {
+    new GraphicsColorFontEx();
+    }
+}
+```
+### 도형 그리기와 칠하기
+#### 도형 그리기
+- 선, 타원, 사각형, 둥근 모서리 사각형, 원호, 폐 다각형 그리기
+- 선의 굵기 조절할 수 없음
+#### 예제 11-3 : 선 그리기
+```java
+import javax.swing.*;
+import java.awt.*;
+public class GraphicsDrawLineEx extends JFrame {
+    public GraphicsDrawLineEx() {
+    setTitle("drawLine 사용 예제");
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setContentPane(new MyPanel());
+    setSize(200, 150);
+    setVisible(true);
+    }
+    class MyPanel extends JPanel {
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.setColor(Color.RED); // 빨간색을 선택한다.
+            g.drawLine(20, 20, 100, 100);
+            g.drawOval(20,20,100,200);
+            g.drawRect(30,30,40,40);
+    }
+    }
+    public static void main(String [] args) {
+    new GraphicsDrawLineEx();
+    }   
+}
+```
+### repaint()
+- 자바 플렛폼에게 컴포넌트 그리기를 강제 지시하는 메소드
+#### 부모 컴포넌트부터 다시 그리는 것이 좋음
+- 이 컴포넌트는 새로운 위치에 다시 그려지지만 이전의 위치에 있던 자신의 모양이 남아 있음
+### 예제 11-7 : repaint()와 마우스를 이용한 타원 그리기
+```java
+package java2;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+public class GraphicsDrawOvalMouseEx extends JFrame {
+    public GraphicsDrawOvalMouseEx() {
+        setTitle("마우스 드래깅으로 타원 그리기 예제");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setContentPane(new MyPanel());
+        setSize(300, 300);
+        setVisible(true);
+    }
+    public static void main(String [] args) {
+    new GraphicsDrawOvalMouseEx();
+    }
+    // 타원을 그릴 패널 작성. 이 패널에 마우스 리스너 구현
+    class MyPanel extends JPanel {
+        java.awt.Point start=null;
+        private java.awt.Point end=null; // 마우스 시작점, 끝점
+        public MyPanel() {
+            MyMouseListener listener = new MyMouseListener();
+
+            // listener를 아래 두 리스너로 공통으로 등록해야 한다.
+        addMouseListener(listener);
+        addMouseMotionListener(listener);
+        }
+        class MyMouseListener extends MouseAdapter {
+            public void mousePressed(MouseEvent e) {
+                start = e.getPoint();
+            }
+        public void mouseDragged(MouseEvent e) {
+                end = e.getPoint();
+                repaint(); // 패널의 그리기 요청 주목
+            }
+        }
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if(start == null) // 타원이 만들어지지 않았음
+                return;
+            g.setColor(Color.BLUE); // 파란색 선택
+            int x = Math.min(start.x, end.x);
+            int y = Math.min(start.y, end.y);
+            int width = Math.abs(start.x - end.x);
+            int height = Math.abs(start.y - end.y);
+            g.drawOval(x, y, width, height); // 타원 그리기
+        }
+    }
+}
+```
+# 12 : 자바 스레드 기초
+### 멀티테스킹
+- 여러개의 작업(태스크)이 동시에 처리되는 것
+### 멀티태스킹 프로그램 사례
+- 미디어 플레이어, 테트리스 게임
+### 스레드와 운영체제
+- 운영체제에 의해 관리되는 하나의 작업 혹은 태스크
+- 스레드와 태스크는 똑같은 의미 이다.(방식이 다를뿐)
+#### 스레드 구성
+##### 스레드 코드
+- 개발자가 작성
+- 작업을 실행하기 위해 작성한 프로그램 코드
+##### 스레드 정보
+- 운영체제가 스레드에 대해 관리하는 정보
+- 스레드 명, 스레드 ID, 스레드의 실행 소요 시간, 스레드의 우선 순위등
+
+### 멀티태스킹과 멀티스레딩
+#### 멀티프로세싱
+- 하나의 응용프로그램이 여러 개의 프로세스를 생성하고, 각 프로세스가 하나의 작업을 처리하는 기법
+- 각 프로세스 독립된 메모리 영역을 보유하고 실행
+- 프로세스 사이의 문맥 교환(프로세싱)에 따른 과도한 오버헤드와 시간 소모의
+문제점
+#### 멀티스레딩
+- 하나의 응용프로그램이 여러 개의 스레드를 생성하고, 각 스레드가
+ 하나의 작업을 처리하는 기법
+- 하나의 응용프로그램에 속한 스레드는 변수 메모리, 파일 오픈 테이
+블 등 자원으로 공유하므로, 문맥 교환에 따른 오버헤드가 매주 작음
+- 현재 대부분의 운영체제가 멀티스레딩을 기본으로 하고 있음
+
+### 자바 스레드와 JVM
+#### 자바 스레드
+- 자바 가상 기계(JVM)에 의해 스케쥴되는 실행 단위의 코드 블럭
+- 스레드의 생명 주기는 JVM에 의해 관리됨 : JVM은 스레드 단위로 스케쥴링
+### 자바 스레드 만들기
+#### 스레드 만드는 2가지 방법
+- java.lang.Thread 클래스를 상속받아 스레드 작성
+- java.lang.Runnable 인터페이스를 구현하여 스레드 작성
+
+### Thread 클래스를 상속받아 스레드 만들기(1)
+- void run, void start 중요
+### Thread 클래스를 상속받아 스레드 만들기(2)
+#### Thread를 상속받아 run() 오버라이딩
+- Thread 클래스 상속. 새 클래스 작성
+- run() 메소드 작성
+- run() 메소드를 스레드 코드라고 부름
+- run() 메소드에서 스레드 실행 시작
+#### 스레드 객체 생성
+- 생성된 객체는 필드와 메소드를 가진 객체일 뿐
+스레드로 작동하지 않음
+#### 스레드 시작
+- start() 메소드 호출
+- 스레드로 작동 시작
+- 스레드 객체의 run()이 비로소 실행
+- JVM에 의해 스케쥴되기 시작함
+
+### 예제 12-1 : Thread를 상속받아 1초 단위 타이머 스레드 만들기
+```java
+package java2;
+import java.awt.*;
+import javax.swing.*;
+
+class TimerThread extends Thread {
+    private JLabel timerLabel; // 타이머 값이 출력되는 레이블
+    public TimerThread(JLabel timerLabel) {
+    this.timerLabel = timerLabel;
+    }
+
+// 스레드 코드. run()이 종료하면 스레드 종료
+    @Override
+    public void run() {
+      int n=0; // 타이머 카운트 값
+        while(true) { // 무한 루프
+            timerLabel.setText(Integer.toString(n));
+            n++; // 카운트 증가
+            try {
+                Thread.sleep(1000); // 1초동안 잠을 잔다.
+            }
+            catch(InterruptedException e) { return;}
+        }
+    }
+}
+public class ThreadTimerEx extends JFrame {
+    public ThreadTimerEx() {
+        setTitle("Thread를 상속받은 타이머 스레드 예제");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Container c = getContentPane();
+        c.setLayout(new FlowLayout());
+        
+        // 타이머 값을 출력할 레이블 생성
+        JLabel timerLabel = new JLabel();
+        timerLabel.setFont(new Font("Gothic", Font.ITALIC, 80));
+        c.add(timerLabel);
+        
+        TimerThread th = new TimerThread(timerLabel);
+        setSize(250,150);
+        setVisible(true);
+        th.start(); // 타이머 스레드의 실행을 시작하게 한다.
+    }
+    public static void main(String[] args) {
+    new ThreadTimerEx();
+    }
+    }
+```
+### 스레드 종료와 타 스레드 강제 종료
+#### 스스로 종료
+- run() 메소드 리텅
+#### 타 스레드에서 강제 종료
+- interrupt() 메소드 사용
+
+### 예제 12-4 정답
+```java
+package java2;
+import java.awt.event.*;
+import javax.swing.*;
+import java.util.Random;
+public class VibratingFrame extends JFrame implements Runnable
+{
+    private Thread th; // 진동하는 스레드
+    public VibratingFrame() {
+        setTitle("진동하는 프레임 만들기");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(200,200);
+        setLocation(300,300);
+        setVisible(true);
+        
+        getContentPane().addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                if(!th.isAlive()) return;
+                    th.interrupt();
+            }
+        });
+        
+        th = new Thread(this); // 진동하는 스레드 객체 생성
+        th.start(); // 진동 시작
+    }
+    @Override
+    public void run() { // 프레임의 진동을 일으키기 위해
+            // 20ms마다 프레임의 위치를 랜덤하게 이동
+            Random r = new Random();
+            while(true) {
+                try {
+                    Thread.sleep(20); // 20ms 잠자기
+                }
+                catch(InterruptedException e){
+                return; // 리턴하면 스레드 종료
+                }
+                int x = getX() + r.nextInt()%5; // 새 위치 x
+                int y = getY() + r.nextInt()%5; // 새 위치 y
+                setLocation(x, y); // 프레임의 위치 이동
+            }
+        }
+        public static void main(String [] args) {
+        new VibratingFrame();
+        }
+}
+```
+### 스레드 동기화
+#### 멀티스레드 프로그램 작성시 주의점
+#### 스레드 동기화
+- 스레드 사이의 실행순서 제어, 공유데이터에 대한 접근을 원활하게 하는 기법
+#### 멀티스레드의 공유 데이터의 동시 접근 문제 해결
+- (방법1)공유 데이터를 접근하는 모든 스레드의 한 줄 세우기
+- (방법2)한 스레드가 공유 데이터에 대한 작업을 끝낼 때까지 다른 스레드가 대기 하도록 함
+#### 자바의 스레드 동기화 방법
+- synchronized 키워드로 동기화 블록 지정
+- wait()-notify() 메소드로 스레드의 실행 순서 제어
+
+### synchronized 블록 지정
+#### 스레드가 독점적으로 실행해야 하는 부분을 표시하는 키워드
+- 임계 영역 표기 키워드
+- synchronized 블록 지정 방법 = 메소드 전체 혹은 코드블록
+
+### wait-notify()를 이용한 스레드 동기화
+#### wait-notify()가 필요한 경우
+- 공유 데이터로 두 개 이상의 스레드가 데이터를 주고 받을 때
+- ex)producer-consumer문제
+### 동기화 메소드
+- wait() : 다른 스레드가 notify를 불러줄 때까지 기다린다.
+- notify() : wait()를 호출하여 대기중인 스레드를 깨운다.
+### 예제 12-6 정답
+```java
+package java2;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+class MyLabel extends JLabel {
+    private int barSize = 0; // 바의 크기
+    private int maxBarSize;
+
+    public MyLabel(int maxBarSize) {
+        this.maxBarSize = maxBarSize;
+    }
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.setColor(Color.MAGENTA);
+        int width = (int)(((double)(this.getWidth()))
+            /maxBarSize*barSize);
+        if(width==0) return;
+        g.fillRect(0, 0, width, this.getHeight());
+    }
+
+    synchronized void fill() {
+        if(barSize == maxBarSize) {
+            try {
+                wait();
+            } catch (InterruptedException e) { return; }
+        }
+        barSize++;
+        repaint(); // 바 다시 그리기
+        notify();
+    }
+    synchronized void consume() {
+        if(barSize == 0) {
+            try {
+                wait();
+            } catch (InterruptedException e)
+                { return; }
+    }
+    barSize--;
+    repaint(); // 바 다시 그리기
+    notify();
+    }
+}
+class ConsumerThread extends Thread {
+    private MyLabel bar;
+
+    public ConsumerThread(MyLabel bar) {
+        this.bar = bar;
+    }
+    @Override
+    public void run() {
+        while(true) {
+            try {
+            sleep(200);
+            bar.consume();
+            } catch (InterruptedException e)
+            { return; }
+         }
+    }
+}
+public class TabAndThreadEx extends JFrame
+{
+    private MyLabel bar = new MyLabel(100);
+    public TabAndThreadEx(String title) {
+        super(title);
+        this.setDefaultCloseOperation
+                (JFrame.EXIT_ON_CLOSE);
+        Container c = getContentPane();
+        c.setLayout(null);
+        bar.setBackground(Color.ORANGE);
+        bar.setOpaque(true);
+        bar.setLocation(20, 50);
+        bar.setSize(300, 20);
+        c.add(bar);
+
+        c.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e)
+        {
+            bar.fill();
+        }
+    });
+    setSize(350,200);
+    setVisible(true);
+
+    c.setFocusable(true);
+    c.requestFocus();
+    ConsumerThread th = new
+        ConsumerThread(bar);
+    th.start(); // 스레드 시작
+    }
+    public static void main(String[] args) {
+    new TabAndThreadEx(
+    "아무키나 빨리 눌러 바 채우기");
+    }
+}
+```
 ## 2024-05-31 13주차
 # 10 : 스윙 컴포넌트 활용
 ### 자바의 GUI 프로그래밍 방법(2종류)
@@ -288,7 +729,7 @@ public class RadioButtonEx extends JFrame {
 
 ```
 ### JTextField로 한 줄 입력 창 만들기
-#### JTextFiedld
+#### JTextField
 #### 한 줄의 문자열을 입력 받는 창(텍스트 필드)
 - 텍스트 입력 도중<Enter>키가 입력되면 Action 이벤트 발생
 - 입력 가능한 문자 개수와 입력 창의 크기는 서로 다름
