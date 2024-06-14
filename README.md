@@ -1,6 +1,152 @@
 # 202130103 김민서
+## 2024-06-14 15주차 
+# 2024-06-14 14주차
+## 13-1장 입출력 스트림과 파일 입출력
+### 스트림의 연결
+#### 여러개의 스트림을 연결하여 사용할 수 있음
+- 예) 키보드에서 문자를 입력받기 위해 System.in과 InputStreamReader를 연결한 코드
+#### 문자 스트림으로 텍스트 파일 읽기
+- 텍스트 파일을 읽기 위해 문자 스트림 FileReader 클래스 이용 3가지 방법
+1. 파일 입력 스트림 생성
+2. 파일 읽기
+3. 스트림 닫기
+#### 파일 입출력과 예외 처리
+#### FileReader의 생성자와 주요 메소드
+- FileReader(file file) file에 지정된 파일로부터 읽는 FileReader 생성
+-
+``` java
+import java.io.*;
+
+public class FileReaderEx{
+    public static void main(String[] args){
+        FileReader in = null;
+        try{
+            in=new FileReader("c:\\windows\\system.ini");
+            int c;
+            while((c=in.read())!= -1){// 한 문자씩 끝까지 읽는다.}
+                System.out.print((char)c);
+        }
+        in.close();
+    }
+    catch(IOException e){
+        System.out.println("입출력 오류");
+    }
+}
+}
+```
+### 문자 스티림으로 텍스트 파일 쓰기
+1. 파일 출력 스트림 생성(파일 열기); -> *유의사항* 괄호안에 파일이 있어야함
+2. 파일 쓰기, write()로 문자 하나 씩 파일에 기록
+```java
+import java.io.*;
+    public class test {
+        public static void main(String[] args) {
+            InputStreamReader in = new InputStreamReader(System.in);
+            FileWriter fout = null;
+            int c;
+        try {
+            fout = new FileWriter("c:\\Temp\\test.txt");
+            while ((c = in.read()) != -1) {
+                fout.write(c); // 키보드로부터 받은 문자를 파일에 저장, 터미널에 입력후 ctrl+c 누르면 저장
+            }
+            in.close();
+            fout.close();
+        }
+        catch (IOException e) {
+            System.out.println("입출력 오류");
+        }
+    }
+}
+```
+### 바이트 스트림으로 바이너리 파일 쓰기
+#### 바이너리 값을 파일에 저장하기
+##### FileOutputStream 클래스를 이용하여 프로그램 내의 변수, 배열, 버터에 든 바이너리 값을 파일에 그대로 기록
+```java
+import java.io.*;
+public class FileOutputStreamEx {
+    public static void main(String[] args) {
+        byte b[] = {7,51,3,4,-1,24};
+        
+        try {
+            FileOutputStream fout = new FileOutputStream("c:\\Temp\\test.out");
+            for(int i=0; i<b.length; i++)
+                fout.write(b[i]); // 배열 b의 바이너리를 그대로 기록
+
+            fout.close();
+        } catch(IOException e) { }
+            System.out.println("c:\\Temp\\test.out을 저장하였습니다.");
+        }       
+}
+```
+#### 바이트 스트림으로 바이너리 파일 읽기
+##### 바이너리 파일에서 읽기 위해 FileInputStream 클래스 이용
+```java
+import java.io.*;
+public class FileInputStreamEx {
+    public static void main(String[] args) {
+        byte b[] = new byte [6]; // 비어 있는 byte 배열
+    try {
+        FileInputStream fin =
+            new FileInputStream("c:\\Temp\\test.out");
+        int n=0, c;
+        while((c = fin.read())!= -1) {
+            b[n] = (byte)c; // 읽은 바이트를 배열에 저장
+            n++;
+        }
+
+        System.out.println(
+            "c:\\Temp\\test.out에서 읽은 배열을 출력합니다.");
+        for(int i=0; i<b.length; i++)
+            System.out.print(b[i]+" ");
+        System.out.println();
+
+        fin.close();
+        } catch(IOException e) { }
+    }   
+}
+```
+### File 클래스
+#### 파일의 결로명 및 속성을 다루는 클래스 
+- java.io.File
+- 파일과 디렉터리 경로명의 추상적 표현
+### File 클래스 활용
+- 파일 크기 f.length();
+
+## 14장 : 자바 소켓 프로그래밍
+### TCP/IP 특징 소개
+- 연결형 통신
+    - 한번 연결 후 계속 데이터 전송 가능
+### IP 주소
+- 숫자로 구성된 주소 ex)192.168.11.14
+- 현재는 32비트의 IP버전 4가 사용되고 있음
+    - 하지만 IP주소 고갈로 인해 128비트의 IP버전 6(IPV6)이 점점 사용되는 추세
+### 포트 - 항구
+### 포트를 이용한 통신
+- 3522.putty,2451.chrome
+### 소켓 프로그래밍
+### Socket 클래스, 클라이언트 소켓
+- Socket(InetAddress address, int port) 소캣을 생성하고, IP주소와 포트번호에서 대기하는 서버에 연결
+### 클라이언트에서 소켓으로 서버에 접속하는 코드
+- Socket clientSocket=new Socket("129.12.1.1",0000);
+    - Socket의 생성자에서 129.12.1.1 주소의 9999포트에 접속
+### 서버에 클라이 언트가 연결되는 과정
+- 서버는 서버 소켓으로 들어오는 연결 요청을 기다림(listen)
+- 클라이언트가 서버에게 연결 요청
+- 서버가 연결 요청 수락(accept)
+
+
 ## 2024-06-07 14주차
 ### 스윙 컴포넌트 그리기, paintComponent()
+#### 스윙의 페인팅 기본
+- 모든 컴포넌트는 자신의 모양을 스스로 그린다.
+- 컨테이너는 자신을 그린 후 그 위에 자식 컴포넌트들에게 그리기 지시
+- 모든 스윙 컴포넌트는 자신의 모양을 그리는 paintComponent()메소드 보유
+
+#### public void painComponent(Gramphics g)
+- 스윙 컴포넌트가 자신의 모양을 그리는 메소드
+- JComponent의 메소드 : 모든 스윙 컴포넌트가 이 메소드를 오버라이딩함
+- 언제 호출 되는가?
+- 컴포넌트가 그려져야 하는 시점마다 호출
 ### paintComponent()의 오버라이딩과 JPanel
 ### 예제 11-1 : JPanel을 상속받은 패널에 도형 그리기
 ```java
